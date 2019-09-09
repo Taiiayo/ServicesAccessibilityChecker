@@ -1,31 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ServicesAccessibilityChecker.Scheduling;
 
 namespace ServicesAccessibilityChecker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
-    {        
-        [HttpGet("GetStatus")]
-        public IActionResult GetStatus(string serviceId)
+    {
+        private readonly StatusChecker _statusChecker;
+        public ValuesController(StatusChecker statusChecker)
         {
-            //if(serviceId == 1)
-            //{
+            _statusChecker = statusChecker;
+        }
 
-            //}
-            //else if(serviceId == 2)
-            //{
+        [HttpGet("GetStatus")]
+        public async Task<IActionResult> GetStatusAsync(int serviceId)
+        {
+            if (serviceId == 0)
+            {
 
-            //}
-            //else
-            //{
+            }
+            else if (serviceId == 1)
+            {
 
-            //}
+            }
+            else
+            {
 
+            }
+            await _statusChecker.SendRequestAsync(serviceId);
             return Ok("");
         }
 
