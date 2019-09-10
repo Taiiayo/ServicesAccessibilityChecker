@@ -28,6 +28,12 @@ namespace ServicesAccessibilityChecker
         {
             services.AddScoped<StatusChecker>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
 
 
             CheckScheduler.Start();
@@ -46,6 +52,7 @@ namespace ServicesAccessibilityChecker
                 app.UseHsts();
             }
 
+            app.UseCors("MyPolicy");
             app.UseHttpsRedirection();
             app.UseMvc();
         }

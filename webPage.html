@@ -1,0 +1,70 @@
+<html>
+<head>
+    <title>Services Monitoring</title>
+    </style>
+</head>
+<body>    
+    <p><textarea rows="10" cols="45" id="text"></textarea></p>
+    <div id='images'></div>
+</body>
+<script>
+    window.addEventListener('load', doStuff, false);
+
+    function doStuff() {   
+        var div = document.createElement('div');
+       
+			var url = "https://localhost:44339/api/values/GetStatus?serviceId=1";
+			var method = 'GET';
+			var shouldBeAsync = true;
+            var oXHR = new XMLHttpRequest(); 
+            
+            function append(){
+                div.appendChild( document.createTextNode(JSON.stringify(oXHR.responseText)) );
+                document.body.appendChild(div);	
+                document.getElementById('text').value = oXHR.responseText;
+            }
+				
+        oXHR.onreadystatechange = append;
+        oXHR.open(method, url, shouldBeAsync); 
+		oXHR.setRequestHeader("Content-Type", "application/json");
+        oXHR.send();
+            
+    };
+  </script>
+// <script>
+//     function showDataWithImages() {
+// 			var postData = document.getElementById('text').value;
+// 			var url = "https://localhost:44379/api/Image/GetImages";
+// 			var method = 'POST';
+// 			var shouldBeAsync = false;
+// 			var oXHR = new XMLHttpRequest(); 
+					
+//         function reportStatus() {
+//             if (oXHR.readyState == 4)   
+//                 showTheList(this.responseText);
+//         }
+//         oXHR.onreadystatechange = reportStatus;
+//         oXHR.open(method, url, shouldBeAsync); 
+// 		oXHR.setRequestHeader("Content-Type", "application/json");
+//         oXHR.send(postData);
+//         function showTheList(json) {
+//             var arrItems = [];
+//             arrItems = JSON.parse(json);
+//             var div = document.getElementById('images');
+//             div.innerHTML = '';
+//             for (i = 0; i <= arrItems.length - 1; i++) {
+//                 var divLeft = document.createElement('div');
+//                 var img = document.createElement('img');
+// 				img.width = 100;
+// 				img.height = 100;
+//                 img.src = "data:image/png;base64," + arrItems[i].fileContents;
+//                 var divRight = document.createElement('div');
+//                 divRight.setAttribute('style', 'border-left: solid 1px #ddd;');
+//                 divRight.appendChild(img);
+//                 div.appendChild(divLeft);
+//                 div.appendChild(divRight);
+//             }
+//         }
+//     }
+// </script>
+</html>

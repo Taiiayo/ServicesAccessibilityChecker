@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using RestSharp;
 using ServicesAccessibilityChecker.Scheduling;
 
 namespace ServicesAccessibilityChecker.Controllers
 {
+    [EnableCors("MyPolicy")]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
@@ -16,22 +19,10 @@ namespace ServicesAccessibilityChecker.Controllers
         }
 
         [HttpGet("GetStatus")]
-        public async Task<IActionResult> GetStatusAsync(int serviceId)
+        public async Task<ActionResult> GetStatusAsync(int serviceId)
         {
-            if (serviceId == 0)
-            {
-
-            }
-            else if (serviceId == 1)
-            {
-
-            }
-            else
-            {
-
-            }
-            await _statusChecker.SendRequestAsync(serviceId);
-            return Ok("");
+            var result = await _statusChecker.SendRequestAsync(serviceId);
+            return Content(result.Content);
         }
 
         // GET api/values
