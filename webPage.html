@@ -6,17 +6,38 @@
 </head>
 
 <body>
-    <table style="width: 400px; margin: auto">
+    <table style="width: 60%; margin: auto">
         <tbody>
             <tr>
-                <td style="text-align:center"><textarea rows="5" cols="35" id="service0"></textarea>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="isEmail()"><label for="service0">refdata/version</label></p>
+                <td style="text-align:center"><textarea rows="5" cols="60" id="service0"></textarea><label
+                        for="service0">refdata/version</label>
+                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 0)">
+                        <input type="button" value="Скрыть" onclick="asd(0, 0)"></p>
+                    <p>
+                        <form id="asd0" action="">
+                            <h1>HII insert some data</h1>
+                        </form>
+                    </p>
                 </td>
-                <td style="text-align:center"><textarea rows="5" cols="35" id="service1"></textarea>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="isEmail()"><label for="service1">ibonus/version</label></p>
+                <td style="text-align:center"><textarea rows="5" cols="60" id="service1"></textarea><label
+                        for="service1">ibonus/version</label>
+                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 1)">
+                        <input type="button" value="Скрыть" onclick="asd(0, 1)"></p>
+                    <p>
+                        <form id="asd1" action="">
+                            <h1>HII insert some data</h1>
+                        </form>
+                    </p>
                 </td>
-                <td style="text-align:center"><textarea rows="5" cols="35" id="service2"></textarea>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="isEmail()"><label for="service2">catalog/catalog</label></p>
+                <td style="text-align:center"><textarea rows="5" cols="60" id="service2"></textarea><label
+                        for="service2">catalog/catalog</label>
+                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 2)">
+                        <input type="button" value="Скрыть" onclick="asd(0, 2)"></p>
+                    <p>
+                        <form id="asd2" action="">
+                            <h1>HII insert some data</h1>
+                        </form>
+                    </p>
                 </td>
             </tr>
         </tbody>
@@ -26,6 +47,10 @@
     window.addEventListener('load', callMethods, false);
 
     function callMethods() {
+        document.getElementById("asd0").style.display = "none";
+        document.getElementById("asd1").style.display = "none";
+        document.getElementById("asd2").style.display = "none";
+
         for (var i = 0; i < 3; i++) {
             console.log(i);
             callService(i);
@@ -45,7 +70,15 @@
         oXHR.open(method, url, shouldBeAsync);
         oXHR.setRequestHeader("Content-Type", "application/json");
         oXHR.send();
-    }   
+    }
+    function asd(a, id) {
+
+        if (a == 1) {
+            document.getElementById("asd" + id).style.display = "block";
+        } else {
+            document.getElementById("asd" + id).style.display = "none";
+        }
+    }
 </script>
 
 </html>
