@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RestSharp;
+using ServicesAccessibilityChecker.Models.Rm;
 using ServicesAccessibilityChecker.Scheduling;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ServicesAccessibilityChecker.Controllers
 {
@@ -19,10 +21,10 @@ namespace ServicesAccessibilityChecker.Controllers
         }
 
         [HttpGet("GetStatus")]
-        public async Task<ActionResult> GetStatusAsync(int serviceId)
+        public async Task<StatusRm> GetStatusAsync(int serviceId)
         {
             var result = await _statusChecker.SendRequestAsync(serviceId);
-            return Content(result.Content);
+            return result;
         }
 
         // GET api/values

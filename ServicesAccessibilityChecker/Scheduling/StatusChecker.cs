@@ -1,5 +1,6 @@
 ﻿using Quartz;
 using RestSharp;
+using ServicesAccessibilityChecker.Models.Rm;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace ServicesAccessibilityChecker.Scheduling
             }
         }
 
-        public async Task<IRestResponse> SendRequestAsync(int i)
+        public async Task<StatusRm> SendRequestAsync(int i)
         {
             var client = new RestClient(links[i]);
             var request = new RestRequest(Method.GET);
@@ -35,7 +36,12 @@ namespace ServicesAccessibilityChecker.Scheduling
             Stopwatch stopWatch = Stopwatch.StartNew();
             IRestResponse response = await client.ExecuteTaskAsync(request);
             stopWatch.Stop();
-            return response;
+            return new StatusRm
+            {
+                IsAvailable = response.IsSuccessful,
+                ServiceName = response.Content,
+                ResponseDuration = stopWatch.ElapsedMilliseconds
+            };
         }
     }
 }
