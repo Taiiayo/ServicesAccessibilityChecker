@@ -6,45 +6,20 @@
 </head>
 
 <body>
-    <table id="myTable" style="width: 60%; margin: auto">
+    <table style="width: 60%; margin: auto">
         <tbody>
             <tr>
+                <td></td>
                 <td style="text-align:center"><textarea rows="5" cols="60" id="service0"></textarea><label
                         for="service0">refdata/version</label>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 0)">
-                        <input type="button" value="Скрыть" onclick="asd(0, 0)"></p>
-                    <p>
-                        <form id="asd0" action="">
-                            <h1>HII insert some data</h1>
-                        </form>
-                    </p>
                 </td>
                 <td style="text-align:center"><textarea rows="5" cols="60" id="service1"></textarea><label
                         for="service1">ibonus/version</label>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 1)">
-                        <input type="button" value="Скрыть" onclick="asd(0, 1)"></p>
-                    <p>
-                        <form id="asd1" action="">
-                            <h1>HII insert some data</h1>
-                        </form>
-                    </p>
                 </td>
                 <td style="text-align:center"><textarea rows="5" cols="60" id="service2"></textarea><label
                         for="service2">catalog/catalog</label>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 2)">
-                        <input type="button" value="Скрыть" onclick="asd(0, 2)"></p>
-                    <p>
-                        <form id="asd2" action="">
-                            <h1>HII insert some data</h1>
-                        </form>
-                    </p>
                 </td>
             </tr>
-        </tbody>
-    </table>
-
-    <table style="width: 60%; margin: auto" id="tablema">
-        <tbody>
             <tr>
                 <td></td>
                 <td>refdata</td>
@@ -53,21 +28,21 @@
             </tr>
             <tr>
                 <td>Имя сервиса:</td>
-                <td id="sn0">&nbsp;</td>
-                <td id="sn1"></td>
-                <td id="sn2"></td>
+                <td>iToolsCore</td>
+                <td>ibonusAPI</td>
+                <td>Catalog</td>
             </tr>
             <tr>
                 <td>Доступен: </td>
-                <td id="ia0"></td>
-                <td id="ia1"></td>
-                <td id="ia2"></td>
+                <td id="ia0">&nbsp;</td>
+                <td id="ia1">&nbsp;</td>
+                <td id="ia2">&nbsp;</td>
             </tr>
             <tr>
-                <td>Время ответа: </td>
-                <td id="rd0"></td>
-                <td id="rd1"></td>
-                <td id="rd2"></td>
+                <td>Время ответа(ms): </td>
+                <td id="rd0">&nbsp;</td>
+                <td id="rd1">&nbsp;</td>
+                <td id="rd2">&nbsp;</td>
             </tr>
             <tr>
                 <td></td>
@@ -113,23 +88,16 @@
 
 </body>
 <script>
-    function insertText (text) {
-        var a = JSON.parse(text);
-    document.getElementById('sn0').firstChild.data = a.ServiceName;
-}
     window.addEventListener('load', callMethods, false);
-
     function callMethods() {
-        
+
         document.getElementById("asd0").style.display = "none";
         document.getElementById("asd1").style.display = "none";
         document.getElementById("asd2").style.display = "none";
 
-
         for (var i = 0; i < 3; i++) {
             var response = callService(i);
         }
-
     };
 
     function callService(id) {
@@ -139,10 +107,11 @@
         var oXHR = new XMLHttpRequest();
 
         function append() {
-            
-            document.getElementById('service' + id).value = oXHR.responseText;
-            var parsedResponse = oXHR.responseText;
-            insertText(parsedResponse);
+            if (oXHR.status == 200) {
+                var result = JSON.parse(oXHR.responseText);
+                document.getElementById('service' + id).value = oXHR.responseText;
+                insertText(result, id);
+            }
         }
 
         oXHR.onreadystatechange = append;
@@ -151,6 +120,10 @@
         oXHR.send();
     };
 
+    function insertText(text, id) {
+        document.getElementById('ia' + id).firstChild.data = text.IsAvailable;
+        document.getElementById('rd' + id).firstChild.data = text.ResponseDuration;
+    }
 
     function asd(a, id) {
 
