@@ -21,10 +21,11 @@ namespace ServicesAccessibilityChecker.Controllers
         }
 
         [HttpGet("GetStatus")]
-        public async Task<StatusRm> GetStatusAsync(int serviceId)
+        public async Task<ActionResult<string>> GetStatusAsync(int serviceId)
         {
             var result = await _statusChecker.SendRequestAsync(serviceId);
-            return result;
+            var ser = JsonConvert.SerializeObject(result);
+            return ser;
         }
 
         // GET api/values
