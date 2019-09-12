@@ -27,7 +27,7 @@ namespace ServicesAccessibilityChecker.Scheduling
         {
             var client = new RestClient(links[i]);
             var request = new RestRequest(Method.GET);
-
+            
             if (i == 2)
             {
                 request.AddHeader("accessKey", "test_05fc5ed1-0199-4259-92a0-2cd58214b29c");

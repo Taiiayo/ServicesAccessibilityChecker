@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using System.IO;
 
 namespace ServicesAccessibilityChecker.Context
 {
@@ -10,9 +12,5 @@ namespace ServicesAccessibilityChecker.Context
         public DbSet<Ibonus> Ibonuses { get; set; }
         public DbSet<Refdata> Refdatas { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=blogging.db");
-        }
     }
 }
