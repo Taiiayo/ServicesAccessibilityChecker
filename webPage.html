@@ -2,21 +2,67 @@
 
 <head>
     <title>Services Monitoring</title>
+    <style>
+        #stats {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #stats td,
+        #stats th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #stats tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #stats tr:hover {
+            background-color: #ddd;
+        }
+
+        #stats th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #f2f2f2;
+            color: white;
+        }
+
+        .button {
+            color: black !important;
+            text-transform: lowercase;
+            background: #ffffff;
+            padding: 5px;
+            border: 1px solid #f2f2f2 !important;
+            border-radius: 1px;
+            display: inline-block;
+            transition: all 0.3s ease 0s;
+        }
+
+        .button:hover {
+            color: #494949 !important;
+            border-radius: 10px;
+            border-color: #494949 !important;
+            transition: all 0.3s ease 0s;
+        }
     </style>
 </head>
 
 <body>
-    <table style="width: 60%; margin: auto">
+    <table style="width: 60%; margin: auto" id="stats">
         <tbody>
             <tr>
                 <td></td>
-                <td style="text-align:center"><textarea rows="5" cols="60" id="service0"></textarea><label
+                <td style="text-align:center"><textarea rows="5" cols="60" id="service0" readonly="yes"></textarea><label
                         for="service0">refdata/version</label>
                 </td>
-                <td style="text-align:center"><textarea rows="5" cols="60" id="service1"></textarea><label
+                <td style="text-align:center"><textarea rows="5" cols="60" id="service1" readonly="yes"></textarea><label
                         for="service1">ibonus/version</label>
                 </td>
-                <td style="text-align:center"><textarea rows="5" cols="60" id="service2"></textarea><label
+                <td style="text-align:center"><textarea rows="5" cols="60" id="service2" readonly="yes"></textarea><label
                         for="service2">catalog/catalog</label>
                 </td>
             </tr>
@@ -47,16 +93,16 @@
             <tr>
                 <td></td>
                 <td>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 0)">
-                        <input type="button" value="Скрыть" onclick="asd(0, 0)"></p>
+                    <p><input type="button" class="button" value="Получить дополнительную информацию" onclick="asd(1, 0)">
+                        <input type="button" class="button" value="Скрыть" onclick="asd(0, 0)"></p>
                 </td>
                 <td>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 1)">
-                        <input type="button" value="Скрыть" onclick="asd(0, 1)"></p>
+                    <p><input type="button" class="button" value="Получить дополнительную информацию" onclick="asd(1, 1)">
+                        <input type="button" class="button" value="Скрыть" onclick="asd(0, 1)"></p>
                 </td>
                 <td>
-                    <p><input type="button" value="Получить дополнительную информацию" onclick="asd(1, 2)">
-                        <input type="button" value="Скрыть" onclick="asd(0, 2)"></p>
+                    <p><input type="button" class="button" value="Получить дополнительную информацию" onclick="asd(1, 2)">
+                        <input type="button" class="button" value="Скрыть" onclick="asd(0, 2)"></p>
                 </td>
             </tr>
             <tr>
