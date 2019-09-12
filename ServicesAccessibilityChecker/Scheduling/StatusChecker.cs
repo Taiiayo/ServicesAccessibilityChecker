@@ -36,6 +36,10 @@ namespace ServicesAccessibilityChecker.Scheduling
             Stopwatch stopWatch = Stopwatch.StartNew();
             IRestResponse response = await client.ExecuteTaskAsync(request);
             stopWatch.Stop();
+
+            Repository repository = new Repository();
+            repository.AddToDb(i, response, stopWatch);
+
             return new StatusRm
             {
                 IsAvailable = response.IsSuccessful,
