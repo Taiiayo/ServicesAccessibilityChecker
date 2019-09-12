@@ -25,8 +25,6 @@ namespace ServicesAccessibilityChecker
             services.AddScoped<StatusChecker>();
             services.AddScoped<FullInfo>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddDbContext<ServicesDbContext>
-                (item => item.UseSqlite(Configuration.GetConnectionString(Path.Combine(Directory.GetCurrentDirectory(), "myconn"))));
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()

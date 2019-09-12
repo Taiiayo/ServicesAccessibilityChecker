@@ -15,4 +15,10 @@
     <PackageReference Include="RestSharp" Version="106.6.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="blogging.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
