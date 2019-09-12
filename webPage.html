@@ -64,21 +64,54 @@
                 <td>
                     <p>
                         <form id="asd0" action="">
-                            <h1>HII insert some data</h1>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Ошибки за последний час</td>
+                                        <td id="eh0">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ошибки за сутки</td>
+                                        <td id="ed0">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </form>
                     </p>
                 </td>
                 <td>
                     <p>
                         <form id="asd1" action="">
-                            <h1>HII insert some data</h1>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Ошибки за последний час</td>
+                                        <td id="eh1">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ошибки за сутки</td>
+                                        <td id="ed1">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </form>
                     </p>
                 </td>
                 <td>
                     <p>
                         <form id="asd2" action="">
-                            <h1>HII insert some data</h1>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>Ошибки за последний час</td>
+                                        <td id="eh2">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ошибки за сутки</td>
+                                        <td id="ed2">&nbsp;</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </form>
                     </p>
                 </td>
@@ -120,6 +153,31 @@
         oXHR.send();
     };
 
+    function callFullResponse(id) {
+        var url = "https://localhost:44339/api/values/GetFullStatus?serviceId=" + id;
+        var method = 'GET';
+        var shouldBeAsync = true;
+        var oXHR = new XMLHttpRequest();
+
+        function appendFull() {
+            if (oXHR.status == 200) {
+                var result = JSON.parse(oXHR.responseText);
+                console.log(result);
+                insertFullText(result, id);
+            }
+        }
+
+        oXHR.onreadystatechange = appendFull;
+        oXHR.open(method, url, shouldBeAsync);
+        oXHR.setRequestHeader("Content-Type", "application/json");
+        oXHR.send();
+    };
+
+    function insertFullText(text, id) {
+        document.getElementById('ed' + id).firstChild.data = text.LastDayErrors;
+        document.getElementById('eh' + id).firstChild.data = text.LastHourErrors;
+    }
+
     function insertText(text, id) {
         document.getElementById('ia' + id).firstChild.data = text.IsAvailable;
         document.getElementById('rd' + id).firstChild.data = text.ResponseDuration;
@@ -129,6 +187,7 @@
 
         if (a == 1) {
             document.getElementById("asd" + id).style.display = "block";
+            callFullResponse(id);
         } else {
             document.getElementById("asd" + id).style.display = "none";
         }

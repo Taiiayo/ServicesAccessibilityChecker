@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using RestSharp;
+using ServicesAccessibilityChecker.Models;
 using ServicesAccessibilityChecker.Models.Rm;
 using ServicesAccessibilityChecker.Scheduling;
 using System.Collections.Generic;
@@ -15,16 +15,26 @@ namespace ServicesAccessibilityChecker.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly StatusChecker _statusChecker;
-        public ValuesController(StatusChecker statusChecker)
+        private readonly FullInfo _fullInfo;
+        public ValuesController(StatusChecker statusChecker, FullInfo fullInfo)
         {
             _statusChecker = statusChecker;
+            _fullInfo = fullInfo;
         }
 
         [HttpGet("GetStatus")]
         public async Task<ActionResult<string>> GetStatusAsync(int serviceId)
         {
-            var result = await _statusChecker.SendRequestAsync(serviceId);
-            var ser = JsonConvert.SerializeObject(result);
+            StatusRm result = await _statusChecker.SendRequestAsync(serviceId);
+            string ser = JsonConvert.SerializeObject(result);
+            return ser;
+        }
+
+        [HttpGet("GetFullStatus")]
+        public ActionResult<string> GetFullStatusAsync(int serviceId)
+        {
+            object result = _fullInfo.ReturnFullInfo(serviceId);
+            string ser = JsonConvert.SerializeObject(result);
             return ser;
         }
 

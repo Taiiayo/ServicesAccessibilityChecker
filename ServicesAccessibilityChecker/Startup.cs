@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ServicesAccessibilityChecker.Models;
 using ServicesAccessibilityChecker.Scheduling;
 
 namespace ServicesAccessibilityChecker
@@ -19,6 +20,7 @@ namespace ServicesAccessibilityChecker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<StatusChecker>();
+            services.AddScoped<FullInfo>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
