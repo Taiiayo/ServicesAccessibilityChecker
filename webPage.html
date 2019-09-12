@@ -226,7 +226,11 @@
 
     function insertText(text, id) {
         document.getElementById('ia' + id).firstChild.data = text.IsAvailable;
+        var duration = text.ResponseDuration;
         document.getElementById('rd' + id).firstChild.data = text.ResponseDuration;
+        if(duration > 30){
+            document.getElementById('rd' + id).style.color = 'red';
+        }
     }
 
     function asd(a, id) {
