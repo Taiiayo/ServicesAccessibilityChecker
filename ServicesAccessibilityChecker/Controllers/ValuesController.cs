@@ -36,14 +36,7 @@ namespace ServicesAccessibilityChecker.Controllers
             object result = _fullInfo.ReturnFullInfo(serviceId);
             string ser = JsonConvert.SerializeObject(result);
             return ser;
-        }
-
-        // GET api/values
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        }    
 
         // GET api/values/5
         [HttpGet("{id}")]
