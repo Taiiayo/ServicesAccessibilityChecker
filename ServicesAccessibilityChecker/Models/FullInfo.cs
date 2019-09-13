@@ -29,7 +29,9 @@ namespace ServicesAccessibilityChecker.Models
                         LastDayErrors = refdata.LastDayErrors,
                         LastHourErrors = refdata.LastHourErrors,
                         BestResponseTime = RefdataBestTime,
-                        AvgResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Average()
+                        AvgResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Average(),
+                        LastHourMaxResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Max(),
+                        LastDayMaxResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Max()
                     };
                     statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - RefdataBestTime;
                     statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - RefdataBestTime;
@@ -47,7 +49,9 @@ namespace ServicesAccessibilityChecker.Models
                         LastDayErrors = ibonus.LastDayErrors,
                         LastHourErrors = ibonus.LastHourErrors,
                         BestResponseTime = IbonusBestTime,
-                        AvgResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Average()
+                        AvgResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Average(),
+                        LastHourMaxResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Max(),
+                        LastDayMaxResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Max()
                     };
                     statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - IbonusBestTime;
                     statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - IbonusBestTime;
@@ -65,7 +69,9 @@ namespace ServicesAccessibilityChecker.Models
                         LastDayErrors = catalog.LastDayErrors,
                         LastHourErrors = catalog.LastHourErrors,
                         BestResponseTime = CatalogBestTime,
-                        AvgResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Average()
+                        AvgResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Average(),
+                        LastHourMaxResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Max(),
+                        LastDayMaxResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Max()
                     };
                     statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - CatalogBestTime;
                     statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - CatalogBestTime;

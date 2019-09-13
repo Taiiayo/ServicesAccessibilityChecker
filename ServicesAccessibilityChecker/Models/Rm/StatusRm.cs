@@ -11,6 +11,8 @@
         public double LastDayResponseDeviationTime { get; set; }
         public double LastHourAvgResponseDuration { get; set; }
         public double LastDayAvgResponseDuration { get; set; }
+        public double LastDayMaxResponseDuration { get; set; }
+        public double LastHourMaxResponseDuration { get; set; }
         public double AvgResponseDuration { get; set; }
         public double BestResponseTime { get; set; }
     }

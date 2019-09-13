@@ -135,6 +135,14 @@
                                         <td>Ошибки за сутки</td>
                                         <td id="ed0">&nbsp;</td>
                                     </tr>
+                                    <tr>
+                                        <td>Максимальное время ответа за сутки:</td>
+                                        <td id="maxht0">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Максимальное время ответа за час:</td>
+                                        <td id="maxdt0">&nbsp;</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </form>
@@ -177,6 +185,14 @@
                                         <td>Ошибки за сутки</td>
                                         <td id="ed1">&nbsp;</td>
                                     </tr>
+                                    <tr>
+                                        <td>Максимальное время ответа за сутки:</td>
+                                        <td id="maxht1">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Максимальное время ответа за час:</td>
+                                        <td id="maxdt1">&nbsp;</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </form>
@@ -218,6 +234,14 @@
                                     <tr>
                                         <td>Ошибки за сутки</td>
                                         <td id="ed2">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Максимальное время ответа за сутки:</td>
+                                        <td id="maxht2">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Максимальное время ответа за час:</td>
+                                        <td id="maxdt2">&nbsp;</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -282,6 +306,14 @@
     };
 
     function insertFullText(text, id) {
+        if(text.LastHourResponseDeviationTime > text.BestResponseTime * 2) {
+            document.getElementById('maxht' + id).firstChild.data = text.LastHourMaxResponseDuration;
+            document.getElementById('maxht' + id).style.color = 'red';
+        }
+        if(text.LastDayResponseDeviationTime > text.BestResponseTime * 2) {
+            document.getElementById('maxdt' + id).firstChild.data = text.LastDayMaxResponseDuration;
+            document.getElementById('maxdt' + id).style.color = 'red';
+        }
         document.getElementById('bt' + id).firstChild.data = text.BestResponseTime;
         document.getElementById('avgt' + id).firstChild.data = text.AvgResponseDuration;
         document.getElementById('avght' + id).firstChild.data = text.LastHourAvgResponseDuration;
