@@ -8,7 +8,7 @@ namespace ServicesAccessibilityChecker.Scheduling
 {
     public class StatusChecker : IJob
     {
-        readonly string[] links = new string[] 
+        readonly string[] links = new string[]
         {
             "http://iswiftdata.1c-work.net/api/refdata/version",
             "http://ibonus.1c-work.net/api/ibonus/version",
@@ -25,9 +25,9 @@ namespace ServicesAccessibilityChecker.Scheduling
 
         public async Task<StatusRm> SendRequestAsync(int i)
         {
-            var client = new RestClient(links[i]);
-            var request = new RestRequest(Method.GET);
-            
+            RestClient client = new RestClient(links[i]);
+            RestRequest request = new RestRequest(Method.GET);
+
             if (i == 2)
             {
                 request.AddHeader("accessKey", "test_05fc5ed1-0199-4259-92a0-2cd58214b29c");

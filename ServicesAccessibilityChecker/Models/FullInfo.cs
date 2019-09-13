@@ -13,7 +13,7 @@ namespace ServicesAccessibilityChecker.Models
         private int RefdataBestTime => int.Parse(Config["ResponseBestTime"]["MaxRefdataResponseDuration"].ToString());
         private int IbonusBestTime => int.Parse(Config["ResponseBestTime"]["MaxIbonusResponseDuration"].ToString());
         private int CatalogBestTime => int.Parse(Config["ResponseBestTime"]["MaxCatalogResponseDuration"].ToString());
-        public StatusRm ReturnFullInfo(int serviceId)
+         StatusRm ReturnFullInfo(int serviceId)
         {
             using (ServicesDbContext dbContext = new ServicesDbContext())
             {

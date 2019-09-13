@@ -12,15 +12,15 @@ namespace ServicesAccessibilityChecker.Scheduling
 
             IJobDetail job = JobBuilder.Create<StatusChecker>().Build();
 
-            ITrigger trigger = TriggerBuilder.Create() 
-                .WithIdentity("trigger1", "group1") 
+            ITrigger trigger = TriggerBuilder.Create()
+                .WithIdentity("trigger1", "group1")
                 .StartNow()
-                .WithSimpleSchedule(x => x            
+                .WithSimpleSchedule(x => x
                     .WithIntervalInMinutes(1)
-                    .RepeatForever())          
-                .Build();                               
+                    .RepeatForever())
+                .Build();
 
-            await scheduler.ScheduleJob(job, trigger); 
+            await scheduler.ScheduleJob(job, trigger);
         }
     }
 }
