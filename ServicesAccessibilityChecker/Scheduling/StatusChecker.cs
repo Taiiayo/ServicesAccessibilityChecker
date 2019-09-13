@@ -44,7 +44,7 @@ namespace ServicesAccessibilityChecker.Scheduling
             {
                 IsAvailable = response.IsSuccessful,
                 ServiceName = response.Content,
-                ResponseDuration = stopWatch.ElapsedMilliseconds
+                ResponseDuration = stopWatch.ElapsedMilliseconds,
             };
         }
     }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Configuration;
 using System.IO;
 
 namespace ServicesAccessibilityChecker.Context

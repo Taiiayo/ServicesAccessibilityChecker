@@ -52,20 +52,8 @@
 </head>
 
 <body>
-    <table style="width: 60%; margin: auto" id="stats">
+    <table style="width: 90%; margin: auto" id="stats">
         <tbody>
-            <tr>
-                <td></td>
-                <td style="text-align:center"><textarea rows="5" cols="60" id="service0" readonly="yes"></textarea><label
-                        for="service0">refdata/version</label>
-                </td>
-                <td style="text-align:center"><textarea rows="5" cols="60" id="service1" readonly="yes"></textarea><label
-                        for="service1">ibonus/version</label>
-                </td>
-                <td style="text-align:center"><textarea rows="5" cols="60" id="service2" readonly="yes"></textarea><label
-                        for="service2">catalog/catalog</label>
-                </td>
-            </tr>
             <tr>
                 <td></td>
                 <td>refdata</td>
@@ -93,15 +81,18 @@
             <tr>
                 <td></td>
                 <td>
-                    <p><input type="button" class="button" value="Получить дополнительную информацию" onclick="asd(1, 0)">
+                    <p><input type="button" class="button" value="Получить дополнительную информацию"
+                            onclick="asd(1, 0)">
                         <input type="button" class="button" value="Скрыть" onclick="asd(0, 0)"></p>
                 </td>
                 <td>
-                    <p><input type="button" class="button" value="Получить дополнительную информацию" onclick="asd(1, 1)">
+                    <p><input type="button" class="button" value="Получить дополнительную информацию"
+                            onclick="asd(1, 1)">
                         <input type="button" class="button" value="Скрыть" onclick="asd(0, 1)"></p>
                 </td>
                 <td>
-                    <p><input type="button" class="button" value="Получить дополнительную информацию" onclick="asd(1, 2)">
+                    <p><input type="button" class="button" value="Получить дополнительную информацию"
+                            onclick="asd(1, 2)">
                         <input type="button" class="button" value="Скрыть" onclick="asd(0, 2)"></p>
                 </td>
             </tr>
@@ -112,6 +103,30 @@
                         <form id="asd0" action="">
                             <table>
                                 <tbody>
+                                    <tr>
+                                        <td>Эталонное время ответа:</td>
+                                        <td id="bt0">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа:</td>
+                                        <td id="avgt0">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа за час:</td>
+                                        <td id="avght0">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа за сутки:</td>
+                                        <td id="avgdt0">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Отклонение от эталонного времени за час:</td>
+                                        <td id="avghd0">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Отклонение от эталонного времени за сутки:</td>
+                                        <td id="avgdd0">&nbsp;</td>
+                                    </tr>
                                     <tr>
                                         <td>Ошибки за последний час</td>
                                         <td id="eh0">&nbsp;</td>
@@ -131,6 +146,30 @@
                             <table>
                                 <tbody>
                                     <tr>
+                                        <td>Эталонное время ответа:</td>
+                                        <td id="bt1">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа:</td>
+                                        <td id="avgt1">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа за час:</td>
+                                        <td id="avght1">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа за сутки:</td>
+                                        <td id="avgdt1">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Отклонение от эталонного времени за час:</td>
+                                        <td id="avghd1">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Отклонение от эталонного времени за сутки:</td>
+                                        <td id="avgdd1">&nbsp;</td>
+                                    </tr>
+                                    <tr>
                                         <td>Ошибки за последний час</td>
                                         <td id="eh1">&nbsp;</td>
                                     </tr>
@@ -148,6 +187,30 @@
                         <form id="asd2" action="">
                             <table>
                                 <tbody>
+                                    <tr>
+                                        <td>Эталонное время ответа:</td>
+                                        <td id="bt2">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа:</td>
+                                        <td id="avgt2">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа за час:</td>
+                                        <td id="avght2">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Среднее время ответа за сутки:</td>
+                                        <td id="avgdt2">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Отклонение от эталонного времени за час:</td>
+                                        <td id="avghd2">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Отклонение от эталонного времени за сутки:</td>
+                                        <td id="avgdd2">&nbsp;</td>
+                                    </tr>
                                     <tr>
                                         <td>Ошибки за последний час</td>
                                         <td id="eh2">&nbsp;</td>
@@ -180,7 +243,7 @@
     };
 
     function callService(id) {
-        var url = "http://localhost:62676/api/values/GetStatus?serviceId=" + id;
+        var url = "http://localhost:62000/api/values/GetStatus?serviceId=" + id;
         var method = 'GET';
         var shouldBeAsync = true;
         var oXHR = new XMLHttpRequest();
@@ -188,7 +251,6 @@
         function append() {
             if (oXHR.status == 200) {
                 var result = JSON.parse(oXHR.responseText);
-                document.getElementById('service' + id).value = oXHR.responseText;
                 insertText(result, id);
             }
         }
@@ -200,7 +262,7 @@
     };
 
     function callFullResponse(id) {
-        var url = "http://localhost:62676/api/values/GetFullStatus?serviceId=" + id;
+        var url = "http://localhost:62000/api/values/GetFullStatus?serviceId=" + id;
         var method = 'GET';
         var shouldBeAsync = true;
         var oXHR = new XMLHttpRequest();
@@ -220,6 +282,12 @@
     };
 
     function insertFullText(text, id) {
+        document.getElementById('bt' + id).firstChild.data = text.BestResponseTime;
+        document.getElementById('avgt' + id).firstChild.data = text.AvgResponseDuration;
+        document.getElementById('avght' + id).firstChild.data = text.LastHourAvgResponseDuration;
+        document.getElementById('avgdt' + id).firstChild.data = text.LastDayAvgResponseDuration;
+        document.getElementById('avghd' + id).firstChild.data = text.LastHourResponseDeviationTime;
+        document.getElementById('avgdd' + id).firstChild.data = text.LastDayResponseDeviationTime;
         document.getElementById('ed' + id).firstChild.data = text.LastDayErrors;
         document.getElementById('eh' + id).firstChild.data = text.LastHourErrors;
     }
@@ -228,7 +296,7 @@
         document.getElementById('ia' + id).firstChild.data = text.IsAvailable;
         var duration = text.ResponseDuration;
         document.getElementById('rd' + id).firstChild.data = text.ResponseDuration;
-        if(duration > 30){
+        if (duration > text.BestResponseTime * 2) {
             document.getElementById('rd' + id).style.color = 'red';
         }
     }

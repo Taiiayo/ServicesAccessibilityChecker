@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="blogging.db">
+    <None Update="servicesStats.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Web\webPage.html">

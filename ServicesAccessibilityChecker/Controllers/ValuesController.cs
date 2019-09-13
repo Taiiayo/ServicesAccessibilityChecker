@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using ServicesAccessibilityChecker.Models;
 using ServicesAccessibilityChecker.Models.Rm;
 using ServicesAccessibilityChecker.Scheduling;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ServicesAccessibilityChecker.Controllers
@@ -33,34 +32,9 @@ namespace ServicesAccessibilityChecker.Controllers
         [HttpGet("GetFullStatus")]
         public ActionResult<string> GetFullStatusAsync(int serviceId)
         {
-            object result = _fullInfo.ReturnFullInfo(serviceId);
+            StatusRm result = _fullInfo.ReturnFullInfo(serviceId);
             string ser = JsonConvert.SerializeObject(result);
             return ser;
-        }    
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

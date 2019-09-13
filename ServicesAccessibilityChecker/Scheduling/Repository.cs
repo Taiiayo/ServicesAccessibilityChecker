@@ -20,7 +20,7 @@ namespace ServicesAccessibilityChecker.Scheduling
                         IsAvailable = response.IsSuccessful,
                         ResponseDuration = stopwatch.ElapsedMilliseconds,
                         LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
-                        LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
+                        LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)                      
                     };
 
                     dbContext.Refdatas.Add(refdata);
