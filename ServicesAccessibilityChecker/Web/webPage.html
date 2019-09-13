@@ -109,30 +109,6 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>Эталонное время ответа:</td>
-                                    <td id="bt0">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа:</td>
-                                    <td id="avgt0">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа за час:</td>
-                                    <td id="avght0">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа за сутки:</td>
-                                    <td id="avgdt0">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Отклонение от эталонного времени за час:</td>
-                                    <td id="avghd0">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Отклонение от эталонного времени за сутки:</td>
-                                    <td id="avgdd0">&nbsp;</td>
-                                </tr>
-                                <tr>
                                     <td>Ошибки за последний час</td>
                                     <td id="eh0">&nbsp;</td>
                                 </tr>
@@ -157,30 +133,6 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td>Эталонное время ответа:</td>
-                                    <td id="bt1">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа:</td>
-                                    <td id="avgt1">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа за час:</td>
-                                    <td id="avght1">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа за сутки:</td>
-                                    <td id="avgdt1">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Отклонение от эталонного времени за час:</td>
-                                    <td id="avghd1">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Отклонение от эталонного времени за сутки:</td>
-                                    <td id="avgdd1">&nbsp;</td>
-                                </tr>
-                                <tr>
                                     <td>Ошибки за последний час</td>
                                     <td id="eh1">&nbsp;</td>
                                 </tr>
@@ -204,30 +156,6 @@
                     <form id="asd2" action="">
                         <table>
                             <tbody>
-                                <tr>
-                                    <td>Эталонное время ответа:</td>
-                                    <td id="bt2">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа:</td>
-                                    <td id="avgt2">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа за час:</td>
-                                    <td id="avght2">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Среднее время ответа за сутки:</td>
-                                    <td id="avgdt2">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Отклонение от эталонного времени за час:</td>
-                                    <td id="avghd2">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>Отклонение от эталонного времени за сутки:</td>
-                                    <td id="avgdd2">&nbsp;</td>
-                                </tr>
                                 <tr>
                                     <td>Ошибки за последний час</td>
                                     <td id="eh2">&nbsp;</td>
@@ -260,12 +188,12 @@
             document.getElementById("asd2").style.display = "none";
 
             for (var i = 0; i < 3; i++) {
-                var response = callService(i);
+                callService(i);
             }
         };
 
         function callService(id) {
-            var url = "http://localhost:44388/api/values/GetStatus?serviceId=" + id;
+            var url = "http://localhost:44388/api/values/stats?serviceId=" + id;
             var method = 'GET';
             var shouldBeAsync = true;
             var oXHR = new XMLHttpRequest();
@@ -284,7 +212,7 @@
         };
 
         function callFullResponse(id) {
-            var url = "http://localhost:44388/api/values/GetFullStatus?serviceId=" + id;
+            var url = "http://localhost:44388/api/values/fullStats?serviceId=" + id;
             var method = 'GET';
             var shouldBeAsync = true;
             var oXHR = new XMLHttpRequest();
@@ -312,12 +240,6 @@
                 document.getElementById('maxdt' + id).firstChild.data = text.LastDayMaxResponseDuration;
                 document.getElementById('maxdt' + id).style.color = 'red';
             }
-            document.getElementById('bt' + id).firstChild.data = text.BestResponseTime;
-            document.getElementById('avgt' + id).firstChild.data = text.AvgResponseDuration;
-            document.getElementById('avght' + id).firstChild.data = text.LastHourAvgResponseDuration;
-            document.getElementById('avgdt' + id).firstChild.data = text.LastDayAvgResponseDuration;
-            document.getElementById('avghd' + id).firstChild.data = text.LastHourResponseDeviationTime;
-            document.getElementById('avgdd' + id).firstChild.data = text.LastDayResponseDeviationTime;
             document.getElementById('ed' + id).firstChild.data = text.LastDayErrors;
             document.getElementById('eh' + id).firstChild.data = text.LastHourErrors;
         }

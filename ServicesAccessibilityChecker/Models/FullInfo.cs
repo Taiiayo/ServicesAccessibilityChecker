@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ServicesAccessibilityChecker.Context;
 using ServicesAccessibilityChecker.Models.Rm;
 using System;
@@ -13,71 +15,88 @@ namespace ServicesAccessibilityChecker.Models
         private int RefdataBestTime => int.Parse(Config["ResponseBestTime"]["MaxRefdataResponseDuration"].ToString());
         private int IbonusBestTime => int.Parse(Config["ResponseBestTime"]["MaxIbonusResponseDuration"].ToString());
         private int CatalogBestTime => int.Parse(Config["ResponseBestTime"]["MaxCatalogResponseDuration"].ToString());
-         StatusRm ReturnFullInfo(int serviceId)
+
+        private readonly ILogger<FullInfo> _logger;
+        public FullInfo(ILogger<FullInfo> logger)
         {
-            using (ServicesDbContext dbContext = new ServicesDbContext())
+            _logger = logger;
+        }
+        public string ReturnFullInfo(int serviceId)
+        {
+            try
             {
-                if (serviceId == 0)
+                using (ServicesDbContext dbContext = new ServicesDbContext())
                 {
-                    Refdata refdata = dbContext.Refdatas.Last();
-                    StatusRm statusRm = new StatusRm()
+                    if (serviceId == 0)
                     {
-                        IsAvailable = refdata.IsAvailable,
-                        LastHourAvgResponseDuration = dbContext.Refdatas.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Average(),
-                        LastDayAvgResponseDuration = dbContext.Refdatas.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Average(),
-                        ResponseDuration = refdata.ResponseDuration,
-                        LastDayErrors = refdata.LastDayErrors,
-                        LastHourErrors = refdata.LastHourErrors,
-                        BestResponseTime = RefdataBestTime,
-                        AvgResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Average(),
-                        LastHourMaxResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Max(),
-                        LastDayMaxResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Max()
-                    };
-                    statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - RefdataBestTime;
-                    statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - RefdataBestTime;
-                    return statusRm;
-                }
-                else if (serviceId == 1)
-                {
-                    Ibonus ibonus = dbContext.Ibonuses.Last();
-                    StatusRm statusRm = new StatusRm()
+                        Refdata refdata = dbContext.Refdatas.Last();
+                        StatusRm statusRm = new StatusRm()
+                        {
+                            IsAvailable = refdata.IsAvailable,
+                            LastHourAvgResponseDuration = dbContext.Refdatas.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Average(),
+                            LastDayAvgResponseDuration = dbContext.Refdatas.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Average(),
+                            ResponseDuration = refdata.ResponseDuration,
+                            LastDayErrors = refdata.LastDayErrors,
+                            LastHourErrors = refdata.LastHourErrors,
+                            BestResponseTime = RefdataBestTime,
+                            AvgResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Average(),
+                            LastHourMaxResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Max(),
+                            LastDayMaxResponseDuration = dbContext.Refdatas.Select(x => x.ResponseDuration).Max()
+                        };
+                        statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - RefdataBestTime;
+                        statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - RefdataBestTime;
+                        string serializedDto = JsonConvert.SerializeObject(statusRm);
+                        return serializedDto;
+                    }
+                    else if (serviceId == 1)
                     {
-                        IsAvailable = ibonus.IsAvailable,
-                        LastHourAvgResponseDuration = dbContext.Ibonuses.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Average(),
-                        LastDayAvgResponseDuration = dbContext.Ibonuses.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Average(),
-                        ResponseDuration = ibonus.ResponseDuration,
-                        LastDayErrors = ibonus.LastDayErrors,
-                        LastHourErrors = ibonus.LastHourErrors,
-                        BestResponseTime = IbonusBestTime,
-                        AvgResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Average(),
-                        LastHourMaxResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Max(),
-                        LastDayMaxResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Max()
-                    };
-                    statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - IbonusBestTime;
-                    statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - IbonusBestTime;
-                    return statusRm;
-                }
-                else
-                {
-                    Catalog catalog = dbContext.Catalogs.Last();
-                    StatusRm statusRm = new StatusRm()
+                        Ibonus ibonus = dbContext.Ibonuses.Last();
+                        StatusRm statusRm = new StatusRm()
+                        {
+                            IsAvailable = ibonus.IsAvailable,
+                            LastHourAvgResponseDuration = dbContext.Ibonuses.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Average(),
+                            LastDayAvgResponseDuration = dbContext.Ibonuses.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Average(),
+                            ResponseDuration = ibonus.ResponseDuration,
+                            LastDayErrors = ibonus.LastDayErrors,
+                            LastHourErrors = ibonus.LastHourErrors,
+                            BestResponseTime = IbonusBestTime,
+                            AvgResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Average(),
+                            LastHourMaxResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Max(),
+                            LastDayMaxResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Max()
+                        };
+                        statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - IbonusBestTime;
+                        statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - IbonusBestTime;
+                        string serializedDto = JsonConvert.SerializeObject(statusRm);
+                        return serializedDto;
+                    }
+                    else
                     {
-                        IsAvailable = catalog.IsAvailable,
-                        LastHourAvgResponseDuration = dbContext.Catalogs.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Average(),
-                        LastDayAvgResponseDuration = dbContext.Catalogs.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Average(),
-                        ResponseDuration = catalog.ResponseDuration,
-                        LastDayErrors = catalog.LastDayErrors,
-                        LastHourErrors = catalog.LastHourErrors,
-                        BestResponseTime = CatalogBestTime,
-                        AvgResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Average(),
-                        LastHourMaxResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Max(),
-                        LastDayMaxResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Max()
-                    };
-                    statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - CatalogBestTime;
-                    statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - CatalogBestTime;
-                    return statusRm;
+                        Catalog catalog = dbContext.Catalogs.Last();
+                        StatusRm statusRm = new StatusRm()
+                        {
+                            IsAvailable = catalog.IsAvailable,
+                            LastHourAvgResponseDuration = dbContext.Catalogs.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Average(),
+                            LastDayAvgResponseDuration = dbContext.Catalogs.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Average(),
+                            ResponseDuration = catalog.ResponseDuration,
+                            LastDayErrors = catalog.LastDayErrors,
+                            LastHourErrors = catalog.LastHourErrors,
+                            BestResponseTime = CatalogBestTime,
+                            AvgResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Average(),
+                            LastHourMaxResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Max(),
+                            LastDayMaxResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Max()
+                        };
+                        statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - CatalogBestTime;
+                        statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - CatalogBestTime;
+                        string serializedDto = JsonConvert.SerializeObject(statusRm);
+                        return serializedDto;
+                    }
                 }
             }
+            catch
+            {
+                _logger.LogError("Wasn't able to get objects from databse");
+                return string.Empty;
+            }            
         }
     }
 }

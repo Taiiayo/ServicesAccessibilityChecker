@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 using ServicesAccessibilityChecker.Models;
-using ServicesAccessibilityChecker.Models.Rm;
 using ServicesAccessibilityChecker.Scheduling;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ServicesAccessibilityChecker.Controllers
@@ -13,28 +14,60 @@ namespace ServicesAccessibilityChecker.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly ILogger<RootController> _logger;
         private readonly StatusChecker _statusChecker;
         private readonly FullInfo _fullInfo;
-        public ValuesController(StatusChecker statusChecker, FullInfo fullInfo)
+        public ValuesController(StatusChecker statusChecker, FullInfo fullInfo, ILogger<RootController> logger)
         {
             _statusChecker = statusChecker;
             _fullInfo = fullInfo;
+            _logger = logger;
         }
 
-        [HttpGet("GetStatus")]
+        [HttpGet("stats")]
         public async Task<ActionResult<string>> GetStatusAsync(int serviceId)
         {
-            StatusRm result = await _statusChecker.SendRequestAsync(serviceId);
-            string ser = JsonConvert.SerializeObject(result);
-            return ser;
+            if (serviceId > 2)
+            {
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("We cannot use IDs greater than 2.")
+                };
+                _logger.LogWarning($"Received Id of service: {serviceId} was greater than 2");
+                throw new System.Web.Http.HttpResponseException(message);
+            }
+            string serializedDto = await _statusChecker.SendRequestAsync(serviceId);
+            //if (string.IsNullOrEmpty(serializedDto))
+            //{
+            //    return StatusCode(500);
+            //}
+            //else
+            {
+                return serializedDto;               
+            }
         }
 
-        [HttpGet("GetFullStatus")]
+        [HttpGet("fullStats")]
         public ActionResult<string> GetFullStatusAsync(int serviceId)
         {
-            StatusRm result = _fullInfo.ReturnFullInfo(serviceId);
-            string ser = JsonConvert.SerializeObject(result);
-            return ser;
+            if (serviceId > 2)
+            {
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("We cannot use IDs greater than 2.")
+                };
+                _logger.LogWarning($"Received Id of service: {serviceId} was greater than 2");
+                throw new System.Web.Http.HttpResponseException(message);
+            }
+            string serializedDto = _fullInfo.ReturnFullInfo(serviceId);
+            //if (string.IsNullOrEmpty(serializedDto))
+            //{
+            //    return StatusCode(500);
+            //}
+            //else
+            {
+                return serializedDto;
+            }
         }
     }
 }

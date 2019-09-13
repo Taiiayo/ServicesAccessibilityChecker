@@ -1,59 +1,92 @@
-﻿using RestSharp;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RestSharp;
 using ServicesAccessibilityChecker.Context;
+using ServicesAccessibilityChecker.Models.Rm;
 using System;
 using System.Diagnostics;
 using System.Linq;
 
 namespace ServicesAccessibilityChecker.Scheduling
-{
+{    
     public class Repository
     {
-        public void AddToDb(int id, IRestResponse response, Stopwatch stopwatch)
+        private readonly ILogger<Repository> _logger;
+        public Repository(ILogger<Repository> logger)
         {
-            using (ServicesDbContext dbContext = new ServicesDbContext())
+            _logger = logger;
+        }
+        public string SaveResponse(int i, Stopwatch stopWatch, IRestResponse response)
+        {
+            bool addedSuccessfully = AddToDb(i, response, stopWatch);
+            if (!addedSuccessfully)
+            {                
+                return string.Empty;
+            }
+
+            StatusRm statusRm = new StatusRm()
             {
-                if (id == 0)
+                IsAvailable = response.IsSuccessful,
+                ServiceName = response.Content,
+                ResponseDuration = stopWatch.ElapsedMilliseconds,
+            };
+            return JsonConvert.SerializeObject(statusRm);
+        }
+        private bool AddToDb(int id, IRestResponse response, Stopwatch stopwatch)
+        {
+            try
+            {
+                using (ServicesDbContext dbContext = new ServicesDbContext())
                 {
-                    Refdata refdata = new Refdata()
+                    if (id == 0)
                     {
-                        CreatedDate = DateTime.UtcNow,
-                        IsAvailable = response.IsSuccessful,
-                        ResponseDuration = stopwatch.ElapsedMilliseconds,
-                        LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
-                        LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
-                    };
+                        Refdata refdata = new Refdata()
+                        {
+                            CreatedDate = DateTime.UtcNow,
+                            IsAvailable = response.IsSuccessful,
+                            ResponseDuration = stopwatch.ElapsedMilliseconds,
+                            LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
+                            LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
+                        };
 
-                    dbContext.Refdatas.Add(refdata);
-                    dbContext.SaveChanges();
-                }
-                else if (id == 1)
-                {
-                    Ibonus ibonus = new Ibonus()
+                        dbContext.Refdatas.Add(refdata);
+                        dbContext.SaveChanges();
+                    }
+                    else if (id == 1)
                     {
-                        CreatedDate = DateTime.UtcNow,
-                        IsAvailable = response.IsSuccessful,
-                        ResponseDuration = stopwatch.ElapsedMilliseconds,
-                        LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
-                        LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
-                    };
-                    dbContext.Ibonuses.Add(ibonus);
-                    dbContext.SaveChanges();
-                }
-                else
-                {
-                    Catalog catalog = new Catalog()
+                        Ibonus ibonus = new Ibonus()
+                        {
+                            CreatedDate = DateTime.UtcNow,
+                            IsAvailable = response.IsSuccessful,
+                            ResponseDuration = stopwatch.ElapsedMilliseconds,
+                            LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
+                            LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
+                        };
+                        dbContext.Ibonuses.Add(ibonus);
+                        dbContext.SaveChanges();
+                    }
+                    else
                     {
-                        CreatedDate = DateTime.UtcNow,
-                        IsAvailable = response.IsSuccessful,
-                        ResponseDuration = stopwatch.ElapsedMilliseconds,
-                        LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
-                        LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
-                    };
+                        Catalog catalog = new Catalog()
+                        {
+                            CreatedDate = DateTime.UtcNow,
+                            IsAvailable = response.IsSuccessful,
+                            ResponseDuration = stopwatch.ElapsedMilliseconds,
+                            LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
+                            LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
+                        };
 
-                    dbContext.Catalogs.Add(catalog);
-                    dbContext.SaveChanges();
+                        dbContext.Catalogs.Add(catalog);
+                        dbContext.SaveChanges();
+                    }
+                    return true;
                 }
             }
+            catch
+            {
+                _logger.LogError("Wasn't able to save objects to databse");
+                return false;
+            }            
         }
     }
 }

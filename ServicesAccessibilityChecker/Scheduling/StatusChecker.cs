@@ -1,4 +1,6 @@
-﻿using Quartz;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Quartz;
 using RestSharp;
 using ServicesAccessibilityChecker.Models.Rm;
 using System.Diagnostics;
@@ -8,6 +10,13 @@ namespace ServicesAccessibilityChecker.Scheduling
 {
     public class StatusChecker : IJob
     {
+        private readonly ILogger<StatusChecker> _logger;
+        private readonly Repository _repository;
+        public StatusChecker(ILogger<StatusChecker> logger, Repository repository)
+        {
+            _logger = logger;
+            _repository = repository;
+        }
         readonly string[] links = new string[]
         {
             "http://iswiftdata.1c-work.net/api/refdata/version",
@@ -23,7 +32,7 @@ namespace ServicesAccessibilityChecker.Scheduling
             }
         }
 
-        public async Task<StatusRm> SendRequestAsync(int i)
+        public async Task<string> SendRequestAsync(int i)
         {
             RestClient client = new RestClient(links[i]);
             RestRequest request = new RestRequest(Method.GET);
@@ -33,19 +42,20 @@ namespace ServicesAccessibilityChecker.Scheduling
                 request.AddHeader("accessKey", "test_05fc5ed1-0199-4259-92a0-2cd58214b29c");
             }
 
-            Stopwatch stopWatch = Stopwatch.StartNew();
-            IRestResponse response = await client.ExecuteTaskAsync(request);
-            stopWatch.Stop();
-
-            Repository repository = new Repository();
-            repository.AddToDb(i, response, stopWatch);
-
-            return new StatusRm
+            IRestResponse response;
+            Stopwatch stopWatch;
+            try
             {
-                IsAvailable = response.IsSuccessful,
-                ServiceName = response.Content,
-                ResponseDuration = stopWatch.ElapsedMilliseconds,
-            };
-        }
+                stopWatch = Stopwatch.StartNew();
+                response = await client.ExecuteTaskAsync(request);
+                stopWatch.Stop();
+            }
+            catch
+            {
+                _logger.LogError("Couldn't execute the request");
+                return string.Empty;
+            }
+            return _repository.SaveResponse(i, stopWatch, response);
+        }       
     }
 }
