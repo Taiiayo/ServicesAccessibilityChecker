@@ -4,11 +4,10 @@ using RestSharp;
 using ServicesAccessibilityChecker.Context;
 using ServicesAccessibilityChecker.Models.Rm;
 using System;
-using System.Diagnostics;
 using System.Linq;
 
 namespace ServicesAccessibilityChecker.Scheduling
-{    
+{
     public class Repository
     {
         private readonly ILogger<Repository> _logger;
@@ -18,11 +17,11 @@ namespace ServicesAccessibilityChecker.Scheduling
             _logger = logger;
         }
 
-        public string SaveResponse(int i, Stopwatch stopWatch, IRestResponse response)
+        public string SaveResponse(int i, double mseconds, IRestResponse response)
         {
-            bool addedSuccessfully = AddToDb(i, response, stopWatch);
+            bool addedSuccessfully = AddToDb(i, response, mseconds);
             if (!addedSuccessfully)
-            {                
+            {
                 return string.Empty;
             }
 
@@ -30,12 +29,12 @@ namespace ServicesAccessibilityChecker.Scheduling
             {
                 IsAvailable = response.IsSuccessful,
                 ServiceName = response.Content,
-                ResponseDuration = stopWatch.ElapsedMilliseconds,
+                ResponseDuration = mseconds,
             };
             return JsonConvert.SerializeObject(statusRm);
         }
 
-        private bool AddToDb(int id, IRestResponse response, Stopwatch stopwatch)
+        private bool AddToDb(int id, IRestResponse response, double mseconds)
         {
             //todo использую три таблицы с одинаковыми данными, своего рода шардинг предполагала, 
             //можно было бы сделать одну таблицу, тогда код уменьшился бы в три раза
@@ -49,7 +48,7 @@ namespace ServicesAccessibilityChecker.Scheduling
                         {
                             CreatedDate = DateTime.UtcNow,
                             IsAvailable = response.IsSuccessful,
-                            ResponseDuration = stopwatch.ElapsedMilliseconds,
+                            ResponseDuration = mseconds,
                             LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
                             LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
                         };
@@ -63,7 +62,7 @@ namespace ServicesAccessibilityChecker.Scheduling
                         {
                             CreatedDate = DateTime.UtcNow,
                             IsAvailable = response.IsSuccessful,
-                            ResponseDuration = stopwatch.ElapsedMilliseconds,
+                            ResponseDuration = mseconds,
                             LastHourErrors = dbContext.Ibonuses.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
                             LastDayErrors = dbContext.Ibonuses.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
                         };
@@ -76,7 +75,7 @@ namespace ServicesAccessibilityChecker.Scheduling
                         {
                             CreatedDate = DateTime.UtcNow,
                             IsAvailable = response.IsSuccessful,
-                            ResponseDuration = stopwatch.ElapsedMilliseconds,
+                            ResponseDuration = mseconds,
                             LastHourErrors = dbContext.Catalogs.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
                             LastDayErrors = dbContext.Catalogs.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
                         };
@@ -87,11 +86,11 @@ namespace ServicesAccessibilityChecker.Scheduling
                     return true;
                 }
             }
-            catch
+            catch (Exception e)
             {
-                _logger.LogError("Wasn't able to save objects to databse");
+                _logger.LogError($"Wasn't able to save objects to databse, ex: {e}");
                 return false;
-            }            
+            }
         }
     }
 }

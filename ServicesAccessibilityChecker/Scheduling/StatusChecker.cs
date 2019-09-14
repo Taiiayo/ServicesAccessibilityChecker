@@ -33,19 +33,21 @@ namespace ServicesAccessibilityChecker.Scheduling
             }
 
             IRestResponse response;
-            Stopwatch stopWatch;
+            double responseDelayTime;
             try
             {
-                stopWatch = Stopwatch.StartNew();
+                Stopwatch stopWatch = Stopwatch.StartNew();
                 response = await client.ExecuteTaskAsync(request);
                 stopWatch.Stop();
+                responseDelayTime = stopWatch.ElapsedMilliseconds;
+                stopWatch.Reset();
             }
             catch
             {
                 _logger.LogError("Couldn't execute the request");
                 return string.Empty;
             }
-            return _repository.SaveResponse(serviceId, stopWatch, response);
+            return _repository.SaveResponse(serviceId, responseDelayTime, response);
         }
     }
 }
