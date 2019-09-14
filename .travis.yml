@@ -6,4 +6,4 @@ dotnet: 2.2.300
 before_script:
   - dotnet restore
 script:  
-  - dotnet test ./ServicesAccessibilityChecker/AccessibilityChecker.Test/AccessibilityChecker.Test.csproj -f netcoreapp2.2
+  - dotnet test ./AccessibilityChecker.Test/AccessibilityChecker.Test.csproj -f netcoreapp2.2
