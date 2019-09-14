@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RestSharp;
+using ServicesAccessibilityChecker.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace ServicesAccessibilityChecker.Scheduling
 {
-    public class StatusChecker
+    public class StatusChecker : IStatusChecker
     {
         private readonly IConfiguration _config;
         private readonly ILogger<StatusChecker> _logger;

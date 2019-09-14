@@ -11,11 +11,14 @@ namespace AccessibilityChecker.Test
         [Fact]
         public void Get_ShouldReturnContentResult()
         {
+            //Arrange
             Mock<ILogger<IndexController>> loggerMock = new Mock<ILogger<IndexController>>();
-
             IndexController indexController = new IndexController(loggerMock.Object);
 
+            //Act
             var result = indexController.Get();
+            
+            //Assert
             Assert.IsType<ContentResult>(result);
         }
     }

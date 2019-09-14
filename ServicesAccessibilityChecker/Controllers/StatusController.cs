@@ -2,9 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ServicesAccessibilityChecker.Models;
-using ServicesAccessibilityChecker.Scheduling;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ServicesAccessibilityChecker.Controllers
@@ -12,12 +9,12 @@ namespace ServicesAccessibilityChecker.Controllers
     [EnableCors("MyPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class StatusController : ControllerBase
     {
-        private readonly ILogger<IndexController> _logger;
-        private readonly FullInfo _fullInfo;
-        private readonly StatusChecker _statusChecker;
-        public ValuesController(FullInfo fullInfo, ILogger<IndexController> logger, StatusChecker statusChecker)
+        private readonly ILogger<StatusController> _logger;
+        private readonly IFullInfo _fullInfo;
+        private readonly IStatusChecker _statusChecker;
+        public StatusController(IFullInfo fullInfo, ILogger<StatusController> logger, IStatusChecker statusChecker)
         {
             _statusChecker = statusChecker;
             _fullInfo = fullInfo;
@@ -30,12 +27,8 @@ namespace ServicesAccessibilityChecker.Controllers
             // хардкод с айдишниками, надо исправить и передавать по-хорошему сразу ссылки, но пока не успела переписать логику
             if (serviceId > 2)
             {
-                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("We cannot use IDs greater than 2.")
-                };
                 _logger.LogWarning($"Received Id of service: {serviceId} was greater than 2");
-                throw new System.Web.Http.HttpResponseException(message);
+                return BadRequest("We cannot use IDs greater than 2.");
             }
             string serializedDto = await _statusChecker.SendRequestAsync(serviceId);
             if (string.IsNullOrEmpty(serializedDto))
@@ -44,7 +37,7 @@ namespace ServicesAccessibilityChecker.Controllers
             }
             else
             {
-                return serializedDto;               
+                return serializedDto;
             }
         }
 
@@ -54,12 +47,8 @@ namespace ServicesAccessibilityChecker.Controllers
             // хардкод с айдишниками, надо исправить и передавать по-хорошему сразу ссылки, но пока не успела переписать логику
             if (serviceId > 2)
             {
-                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                {
-                    Content = new StringContent("We cannot use IDs greater than 2.")
-                };
                 _logger.LogWarning($"Received Id of service: {serviceId} was greater than 2");
-                throw new System.Web.Http.HttpResponseException(message);
+                return BadRequest("We cannot use IDs greater than 2.");
             }
 
             string serializedDto = _fullInfo.ReturnFullInfo(serviceId);

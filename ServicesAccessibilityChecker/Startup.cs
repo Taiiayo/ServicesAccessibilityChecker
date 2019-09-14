@@ -21,7 +21,7 @@ namespace ServicesAccessibilityChecker
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<CheckStatusJob>();
-            services.AddScoped<FullInfo>();
+            services.AddSingleton<IFullInfo, FullInfo>();
             services.AddScoped<Repository>();
             services.AddScoped<StatusChecker>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

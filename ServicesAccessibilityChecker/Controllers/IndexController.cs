@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using System.Net.Http;
 
 namespace ServicesAccessibilityChecker.Controllers
 {
@@ -31,13 +29,9 @@ namespace ServicesAccessibilityChecker.Controllers
             }
             catch
             {
-                var message = new HttpResponseMessage(HttpStatusCode.NotFound)
-                {
-                    Content = new StringContent("We cannot find the page.")
-                };
                 _logger.LogError("Wasn't able to load the webPage, please, check the source");
-                throw new System.Web.Http.HttpResponseException(message);
-            }           
+                return NotFound("We cannot find the page.");
+            }
         }
     }
 }

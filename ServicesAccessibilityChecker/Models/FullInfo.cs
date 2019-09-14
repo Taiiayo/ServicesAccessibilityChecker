@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ServicesAccessibilityChecker.Models
 {
-    public class FullInfo
+    public class FullInfo : IFullInfo
     {
         private readonly ILogger<FullInfo> _logger;
         private readonly IConfiguration _config;

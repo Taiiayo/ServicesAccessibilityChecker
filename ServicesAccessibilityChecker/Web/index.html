@@ -193,7 +193,7 @@
         };
 
         function callService(id) {
-            var url = "http://localhost:44388/api/values/stats?serviceId=" + id;
+            var url = "http://localhost:44388/api/status/stats?serviceId=" + id;
             var method = 'GET';
             var shouldBeAsync = true;
             var oXHR = new XMLHttpRequest();
@@ -212,7 +212,7 @@
         };
 
         function callFullResponse(id) {
-            var url = "http://localhost:44388/api/values/fullStats?serviceId=" + id;
+            var url = "http://localhost:44388/api/status/fullStats?serviceId=" + id;
             var method = 'GET';
             var shouldBeAsync = true;
             var oXHR = new XMLHttpRequest();
