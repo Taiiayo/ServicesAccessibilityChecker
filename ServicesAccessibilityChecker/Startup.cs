@@ -42,7 +42,7 @@ namespace ServicesAccessibilityChecker
             }
 
             app.UseCors("MyPolicy");
-            app.UseHttpsRedirection();//addloggingmiddleware
+            app.UseHttpsRedirection();//можно было бы добавить lodding middleware, но не хватило времени
             app.UseMvc();
         }
     }

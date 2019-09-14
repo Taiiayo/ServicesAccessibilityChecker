@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RestSharp;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServicesAccessibilityChecker.Scheduling
@@ -27,7 +25,7 @@ namespace ServicesAccessibilityChecker.Scheduling
             List<string> links = _config.GetSection("ServicesLinks:Links").Get<List<string>>();
             RestClient client = new RestClient(links[serviceId]);
             RestRequest request = new RestRequest(Method.GET);
-            // вот тут 2 - явно магическое число, но на момент написания кода я не очень понимаю, как исправить это
+            // вот тут 2 - явно магическое число, тут надо разделить ссылки на публичные и не публичные, но пока не придумала, как
             if (serviceId == 2)
             {
                 request.AddHeader("accessKey", _config.GetSection("Headers:AccessKey").Get<string>());

@@ -27,6 +27,7 @@ namespace ServicesAccessibilityChecker.Controllers
         [HttpGet("stats")]
         public async Task<ActionResult<string>> GetStatusAsync(int serviceId)
         {
+            // хардкод с айдишниками, надо исправить и передавать по-хорошему сразу ссылки, но пока не успела переписать логику
             if (serviceId > 2)
             {
                 HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.BadRequest)
@@ -50,6 +51,7 @@ namespace ServicesAccessibilityChecker.Controllers
         [HttpGet("fullStats")]
         public ActionResult<string> GetFullStatusAsync(int serviceId)
         {
+            // хардкод с айдишниками, надо исправить и передавать по-хорошему сразу ссылки, но пока не успела переписать логику
             if (serviceId > 2)
             {
                 HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.BadRequest)

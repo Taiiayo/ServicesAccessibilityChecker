@@ -1,28 +1,26 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using ServicesAccessibilityChecker.Context;
 using ServicesAccessibilityChecker.Models.Rm;
 using System;
-using System.IO;
 using System.Linq;
 
 namespace ServicesAccessibilityChecker.Models
 {
     public class FullInfo
     {
-        private JToken Config => JToken.Parse(File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "appsettings.json")));
-        private int RefdataBestTime => int.Parse(Config["ResponseBestTime"]["MaxRefdataResponseDuration"].ToString());
-        private int IbonusBestTime => int.Parse(Config["ResponseBestTime"]["MaxIbonusResponseDuration"].ToString());
-        private int CatalogBestTime => int.Parse(Config["ResponseBestTime"]["MaxCatalogResponseDuration"].ToString());
-
         private readonly ILogger<FullInfo> _logger;
+        private readonly IConfiguration _config;
 
-        public FullInfo(ILogger<FullInfo> logger)
+        public FullInfo(
+            ILogger<FullInfo> logger,
+            IConfiguration config)
         {
             _logger = logger;
+            _config = config;
         }
-        
+
         public string ReturnFullInfo(int serviceId)
         {
             try
@@ -31,6 +29,7 @@ namespace ServicesAccessibilityChecker.Models
                 {
                     if (serviceId == 0)
                     {
+                        double RefdataBestTime = _config.GetSection("ResponseBestTime:MaxRefdataResponseDuration").Get<double>();
                         Refdata refdata = dbContext.Refdatas.Last();
                         StatusRm statusRm = new StatusRm()
                         {
@@ -52,6 +51,7 @@ namespace ServicesAccessibilityChecker.Models
                     }
                     else if (serviceId == 1)
                     {
+                        double IbonusBestTime = _config.GetSection("ResponseBestTime:MaxIbonusResponseDuration").Get<double>();
                         Ibonus ibonus = dbContext.Ibonuses.Last();
                         StatusRm statusRm = new StatusRm()
                         {
@@ -73,6 +73,7 @@ namespace ServicesAccessibilityChecker.Models
                     }
                     else
                     {
+                        double CatalogBestTime = _config.GetSection("ResponseBestTime:MaxCatalogResponseDuration").Get<double>();
                         Catalog catalog = dbContext.Catalogs.Last();
                         StatusRm statusRm = new StatusRm()
                         {
@@ -98,7 +99,7 @@ namespace ServicesAccessibilityChecker.Models
             {
                 _logger.LogError("Wasn't able to get objects from databse");
                 return string.Empty;
-            }            
+            }
         }
     }
 }
