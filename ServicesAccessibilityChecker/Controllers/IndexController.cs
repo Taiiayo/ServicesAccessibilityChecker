@@ -18,7 +18,7 @@ namespace ServicesAccessibilityChecker.Controllers
         [HttpGet, Route("")]
         public IActionResult Get()
         {
-            string content = System.IO.File.ReadAllText(System.IO.Path.GetFullPath(@"Web\index.html"));
+            string content = System.IO.File.ReadAllText(System.IO.Path.GetFullPath(@"Web/index.html"));
             try
             {
                 return new ContentResult()
