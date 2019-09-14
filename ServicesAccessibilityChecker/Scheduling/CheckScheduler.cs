@@ -10,7 +10,7 @@ namespace ServicesAccessibilityChecker.Scheduling
             IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             await scheduler.Start();
 
-            IJobDetail job = JobBuilder.Create<StatusChecker>().Build();
+            IJobDetail job = JobBuilder.Create<CheckStatusJob>().Build();
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("trigger1", "group1")

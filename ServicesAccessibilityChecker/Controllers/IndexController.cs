@@ -8,10 +8,10 @@ namespace ServicesAccessibilityChecker.Controllers
 {
     [EnableCors("MyPolicy")]
     [ApiController]
-    public class RootController : ControllerBase
+    public class IndexController : ControllerBase
     {
-        private readonly ILogger<RootController> _logger;
-        public RootController(ILogger<RootController> logger)
+        private readonly ILogger<IndexController> _logger;
+        public IndexController(ILogger<IndexController> logger)
         {
             _logger = logger;
         }
@@ -20,7 +20,7 @@ namespace ServicesAccessibilityChecker.Controllers
         [HttpGet, Route("")]
         public IActionResult Get()
         {
-            string content = System.IO.File.ReadAllText(System.IO.Path.GetFullPath(@"Web\webPage.html"));
+            string content = System.IO.File.ReadAllText(System.IO.Path.GetFullPath(@"Web\index.html"));
             try
             {
                 return new ContentResult()

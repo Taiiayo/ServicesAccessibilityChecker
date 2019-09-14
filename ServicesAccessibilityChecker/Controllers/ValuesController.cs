@@ -14,10 +14,10 @@ namespace ServicesAccessibilityChecker.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private readonly ILogger<RootController> _logger;
-        private readonly StatusChecker _statusChecker;
+        private readonly ILogger<IndexController> _logger;
         private readonly FullInfo _fullInfo;
-        public ValuesController(StatusChecker statusChecker, FullInfo fullInfo, ILogger<RootController> logger)
+        private readonly StatusChecker _statusChecker;
+        public ValuesController(FullInfo fullInfo, ILogger<IndexController> logger, StatusChecker statusChecker)
         {
             _statusChecker = statusChecker;
             _fullInfo = fullInfo;
@@ -37,11 +37,11 @@ namespace ServicesAccessibilityChecker.Controllers
                 throw new System.Web.Http.HttpResponseException(message);
             }
             string serializedDto = await _statusChecker.SendRequestAsync(serviceId);
-            //if (string.IsNullOrEmpty(serializedDto))
-            //{
-            //    return StatusCode(500);
-            //}
-            //else
+            if (string.IsNullOrEmpty(serializedDto))
+            {
+                return StatusCode(500);
+            }
+            else
             {
                 return serializedDto;               
             }
@@ -59,12 +59,14 @@ namespace ServicesAccessibilityChecker.Controllers
                 _logger.LogWarning($"Received Id of service: {serviceId} was greater than 2");
                 throw new System.Web.Http.HttpResponseException(message);
             }
+
             string serializedDto = _fullInfo.ReturnFullInfo(serviceId);
-            //if (string.IsNullOrEmpty(serializedDto))
-            //{
-            //    return StatusCode(500);
-            //}
-            //else
+
+            if (string.IsNullOrEmpty(serializedDto))
+            {
+                return StatusCode(500);
+            }
+            else
             {
                 return serializedDto;
             }

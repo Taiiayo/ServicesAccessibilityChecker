@@ -12,10 +12,12 @@ namespace ServicesAccessibilityChecker.Scheduling
     public class Repository
     {
         private readonly ILogger<Repository> _logger;
+
         public Repository(ILogger<Repository> logger)
         {
             _logger = logger;
         }
+
         public string SaveResponse(int i, Stopwatch stopWatch, IRestResponse response)
         {
             bool addedSuccessfully = AddToDb(i, response, stopWatch);
@@ -32,6 +34,7 @@ namespace ServicesAccessibilityChecker.Scheduling
             };
             return JsonConvert.SerializeObject(statusRm);
         }
+
         private bool AddToDb(int id, IRestResponse response, Stopwatch stopwatch)
         {
             try

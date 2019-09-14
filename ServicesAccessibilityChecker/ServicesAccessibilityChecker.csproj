@@ -24,7 +24,7 @@
     <None Update="servicesStats.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Web\webPage.html">
+    <None Update="Web\index.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

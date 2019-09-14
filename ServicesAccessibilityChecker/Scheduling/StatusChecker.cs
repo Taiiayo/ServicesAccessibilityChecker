@@ -1,45 +1,36 @@
-﻿using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Quartz;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RestSharp;
-using ServicesAccessibilityChecker.Models.Rm;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ServicesAccessibilityChecker.Scheduling
 {
-    public class StatusChecker : IJob
+    public class StatusChecker
     {
+        private readonly IConfiguration _config;
         private readonly ILogger<StatusChecker> _logger;
         private readonly Repository _repository;
-        public StatusChecker(ILogger<StatusChecker> logger, Repository repository)
+
+        public StatusChecker(ILogger<StatusChecker> logger, Repository repository, IConfiguration config)
         {
             _logger = logger;
             _repository = repository;
-        }
-        readonly string[] links = new string[]
-        {
-            "http://iswiftdata.1c-work.net/api/refdata/version",
-            "http://ibonus.1c-work.net/api/ibonus/version",
-            "http://iswiftdata.1c-work.net/api/catalog/catalog"
-        };
-
-        public async Task Execute(IJobExecutionContext context)
-        {
-            for (int i = 0; i < links.Length; i++)
-            {
-                await SendRequestAsync(i);
-            }
+            _config = config;
         }
 
-        public async Task<string> SendRequestAsync(int i)
+        public async Task<string> SendRequestAsync(int serviceId)
         {
-            RestClient client = new RestClient(links[i]);
+            List<string> links = _config.GetSection("ServicesLinks:Links").Get<List<string>>();
+            RestClient client = new RestClient(links[serviceId]);
             RestRequest request = new RestRequest(Method.GET);
-
-            if (i == 2)
+            // вот тут 2 - явно магическое число, но на момент написания кода я не очень понимаю, как исправить это
+            if (serviceId == 2)
             {
-                request.AddHeader("accessKey", "test_05fc5ed1-0199-4259-92a0-2cd58214b29c");
+                request.AddHeader("accessKey", _config.GetSection("Headers:AccessKey").Get<string>());
             }
 
             IRestResponse response;
@@ -55,7 +46,7 @@ namespace ServicesAccessibilityChecker.Scheduling
                 _logger.LogError("Couldn't execute the request");
                 return string.Empty;
             }
-            return _repository.SaveResponse(i, stopWatch, response);
-        }       
+            return _repository.SaveResponse(serviceId, stopWatch, response);
+        }
     }
 }
