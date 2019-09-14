@@ -37,6 +37,8 @@ namespace ServicesAccessibilityChecker.Scheduling
 
         private bool AddToDb(int id, IRestResponse response, Stopwatch stopwatch)
         {
+            //todo использую три таблицы с одинаковыми данными, своего рода шардинг предполагала, 
+            //можно было бы сделать одну таблицу, тогда код уменьшился бы в три раза
             try
             {
                 using (ServicesDbContext dbContext = new ServicesDbContext())
@@ -62,8 +64,8 @@ namespace ServicesAccessibilityChecker.Scheduling
                             CreatedDate = DateTime.UtcNow,
                             IsAvailable = response.IsSuccessful,
                             ResponseDuration = stopwatch.ElapsedMilliseconds,
-                            LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
-                            LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
+                            LastHourErrors = dbContext.Ibonuses.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
+                            LastDayErrors = dbContext.Ibonuses.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
                         };
                         dbContext.Ibonuses.Add(ibonus);
                         dbContext.SaveChanges();
@@ -75,8 +77,8 @@ namespace ServicesAccessibilityChecker.Scheduling
                             CreatedDate = DateTime.UtcNow,
                             IsAvailable = response.IsSuccessful,
                             ResponseDuration = stopwatch.ElapsedMilliseconds,
-                            LastHourErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
-                            LastDayErrors = dbContext.Refdatas.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
+                            LastHourErrors = dbContext.Catalogs.Count(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60) && r.IsAvailable == false),
+                            LastDayErrors = dbContext.Catalogs.Count(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1) && r.IsAvailable == false)
                         };
 
                         dbContext.Catalogs.Add(catalog);

@@ -26,7 +26,7 @@ namespace ServicesAccessibilityChecker.Scheduling
             List<string> links = _config.GetSection("ServicesLinks:Links").Get<List<string>>();
             RestClient client = new RestClient(links[serviceId]);
             RestRequest request = new RestRequest(Method.GET);
-            // вот тут 2 - явно магическое число, тут надо разделить ссылки на публичные и не публичные, но пока не придумала, как
+            //todo вот тут 2 - явно магическое число, тут надо разделить ссылки на публичные и не публичные, но пока не придумала, как
             if (serviceId == 2)
             {
                 request.AddHeader("accessKey", _config.GetSection("Headers:AccessKey").Get<string>());

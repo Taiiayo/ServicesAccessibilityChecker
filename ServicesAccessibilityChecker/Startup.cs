@@ -20,10 +20,10 @@ namespace ServicesAccessibilityChecker
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<CheckStatusJob>();
+            services.AddSingleton<CheckStatusJob>();
             services.AddSingleton<IFullInfo, FullInfo>();
-            services.AddScoped<Repository>();
-            services.AddScoped<StatusChecker>();
+            services.AddSingleton<IStatusChecker, StatusChecker>();
+            services.AddSingleton<Repository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.ConfigureCors();
 
@@ -42,7 +42,7 @@ namespace ServicesAccessibilityChecker
             }
 
             app.UseCors("MyPolicy");
-            app.UseHttpsRedirection();//можно было бы добавить lodding middleware, но не хватило времени
+            app.UseHttpsRedirection();//todo можно было бы добавить lodding middleware, но не хватило времени
             app.UseMvc();
         }
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServicesAccessibilityChecker.Controllers
 {
+    // todo прокинуть url бэка во фронт
     [EnableCors("MyPolicy")]
     [Route("api/[controller]")]
     [ApiController]
@@ -24,7 +25,7 @@ namespace ServicesAccessibilityChecker.Controllers
         [HttpGet("stats")]
         public async Task<ActionResult<string>> GetStatusAsync(int serviceId)
         {
-            // хардкод с айдишниками, надо исправить и передавать по-хорошему сразу ссылки, но пока не успела переписать логику
+            //todo хардкод с айдишниками, надо исправить и передавать по-хорошему сразу ссылки, но пока не успела переписать логику
             if (serviceId > 2)
             {
                 _logger.LogWarning($"Received Id of service: {serviceId} was greater than 2");
@@ -44,7 +45,7 @@ namespace ServicesAccessibilityChecker.Controllers
         [HttpGet("fullStats")]
         public ActionResult<string> GetFullStatusAsync(int serviceId)
         {
-            // хардкод с айдишниками, надо исправить и передавать по-хорошему сразу ссылки, но пока не успела переписать логику
+            //todo хардкод с айдишниками, надо исправить и передавать по-хорошему сразу ссылки, но пока не успела переписать логику
             if (serviceId > 2)
             {
                 _logger.LogWarning($"Received Id of service: {serviceId} was greater than 2");

@@ -22,7 +22,9 @@ namespace ServicesAccessibilityChecker.Models
         }
 
         public string ReturnFullInfo(int serviceId)
-        {
+        {   //todo использую три таблицы с одинаковыми данными, своего рода шардинг предполагала, 
+            //можно было бы сделать одну таблицу, тогда код уменьшился бы в три раза
+            
             try
             {
                 using (ServicesDbContext dbContext = new ServicesDbContext())
@@ -63,8 +65,8 @@ namespace ServicesAccessibilityChecker.Models
                             LastHourErrors = ibonus.LastHourErrors,
                             BestResponseTime = IbonusBestTime,
                             AvgResponseDuration = dbContext.Ibonuses.Select(x => x.ResponseDuration).Average(),
-                            LastHourMaxResponseDuration = dbContext.Refdatas.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Max(),
-                            LastDayMaxResponseDuration = dbContext.Refdatas.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Max()
+                            LastHourMaxResponseDuration = dbContext.Ibonuses.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Max(),
+                            LastDayMaxResponseDuration = dbContext.Ibonuses.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Max()
                         };
                         statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - IbonusBestTime;
                         statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - IbonusBestTime;
@@ -85,8 +87,8 @@ namespace ServicesAccessibilityChecker.Models
                             LastHourErrors = catalog.LastHourErrors,
                             BestResponseTime = CatalogBestTime,
                             AvgResponseDuration = dbContext.Catalogs.Select(x => x.ResponseDuration).Average(),
-                            LastHourMaxResponseDuration = dbContext.Refdatas.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Max(),
-                            LastDayMaxResponseDuration = dbContext.Refdatas.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Max()
+                            LastHourMaxResponseDuration = dbContext.Catalogs.Where(r => r.CreatedDate > DateTime.UtcNow.AddMinutes(-60)).Select(x => x.ResponseDuration).Max(),
+                            LastDayMaxResponseDuration = dbContext.Catalogs.Where(r => r.CreatedDate > DateTime.UtcNow.AddDays(-1)).Select(x => x.ResponseDuration).Max()
                         };
                         statusRm.LastHourResponseDeviationTime = statusRm.LastHourAvgResponseDuration - CatalogBestTime;
                         statusRm.LastDayResponseDeviationTime = statusRm.LastDayAvgResponseDuration - CatalogBestTime;
